@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	 <div id="container"></div>
+    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
+	<title>微生活推荐</title>
+</head>
+<body>
+	<div id="container"></div>
+	<script defer="defer">
+      
+
+      var stage = new Kinetic.Stage({
+        container: 'container',
+        width: 1000,
+        height: 1000
+      });
+
+       var centerX = stage.getWidth() / 2;
+        
+        var imgArry = new Array();
+        for(var i=0;i<5;i++){
+          imgArry[i] = new Image();
+          imgArry[i] .onload = function(e){
+            var a = new handle();
+            a.init(this,function(){
+               var angularSpeed = Math.PI / 2; 
+               //
+               a.couldBox[0].offset(50+800,50+120);
+               var b = new  Kinetic.Animation(function(frame){
+                var angleDiff = frame.timeDiff * angularSpeed / 1000; 
+                var angleDiff2 = frame.timeDiff * angularSpeed / 2500; 
+                 a.couldBox[0].rotate(angleDiff);
+                 a.couldBox[1].rotate(angleDiff2);
+               }, a.couldlay);
+                b.start()
+            });
+            
+             //
+          };
+        }
+
+        
+     
+
+      
+      imgArry[0].src="Image/bg.png";
+      imgArry[0].dataset.type="bg";
+      imgArry[1].src="Image/cloud1.png";
+      imgArry[1].dataset.type="cloud";
+      imgArry[2].src="Image/cloud2.png";
+      imgArry[2].dataset.type="cloud";
+      imgArry[3].src="Image/cloud3.png";
+      imgArry[3].dataset.type="cloud"
+
+
+      var handle = (function(){
+          var handle=function(){};
+          handle.prototype.bglay = new Kinetic.Layer();
+          handle.prototype.couldlay = new Kinetic.Layer();
+          handle.prototype.couldBox = new Array();
+          handle.prototype.cloudGroupSize=2;
+          handle.prototype.init = function(obj,backFun) {
+             var type = obj.dataset.type;
+               if(type=="bg"){
+                  var image = new Kinetic.Image({
+                    x: 50,
+                    y: 50,
+                    image: obj
+                  });
+                  this.bglay.add(image);
+                  stage.add(this.bglay)
+               }
+
+               if(type=="cloud"){
+                  if(this.couldBox.length>=this.cloudGroupSize){
+
+                    backFun();
+                    return;
+                  }
+                  var a = Math.floor(Math.random()*3);
+                  if(a>0){
+                    var image = new Kinetic.Image({
+                      x: 300,
+                      y: 300,
+                      image: imgArry[a],
+                      width:300,
+                      height:240,
+                      offset:{x:150,y:150}
+
+                    });
+
+                    this.couldlay.add(image);
+                    stage.add(this.couldlay);
+                    this.couldBox.push(image);
+                  }
+               }
+          };
+          return handle;
+        })()
+
+      
+    </script>
+</body>
+</html>
